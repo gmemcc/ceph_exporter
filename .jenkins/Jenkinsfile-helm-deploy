@@ -12,7 +12,7 @@ pipeline {
                     namespace: "$JOB_DIR",
                     values: [
                         "exporter.image.repo": "$DEFAULT_DOCKER_REPO/digitalocean",
-                        "exporter.ceph.mons": "$params.MON_HOSTS"
+                        "exporter.ceph.mons": "$params.MON_HOSTS",
                         "exporter.ceph.user":"$params.CLIENT_USER",
                         "exporter.ceph.key":"$params.CLIENT_KEY"
                     ]
