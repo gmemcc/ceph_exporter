@@ -1,4 +1,4 @@
-FROM ubuntu:16.04 as builder
+FROM ubuntu:16.04
 MAINTAINER Vaibhav Bhembre <vaibhav@digitalocean.com>
 
 ENV GOROOT /goroot
@@ -37,8 +37,8 @@ RUN echo "deb https://download.ceph.com/debian-luminous xenial main" >> /etc/apt
     rm -rf /var/lib/apt/lists/*
 
 
-COPY --from=builder /bin/ceph_exporter /bin/ceph_exporter
+COPY /bin/ceph_exporter /bin/ceph_exporter
 RUN chmod +x /bin/ceph_exporter
 
-EXPOSE 9128
+EXPOSE 9100
 ENTRYPOINT ["/bin/ceph_exporter"]
