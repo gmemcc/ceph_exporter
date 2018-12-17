@@ -1,0 +1,12 @@
+pipeline {
+    agent none
+    options { skipDefaultCheckout() }
+    stages {
+        stage( 'helm build' ) {
+            agent { label 'helm' }
+            steps {
+                helmBuild scm: true
+            }
+        }
+    }
+}
