@@ -1,0 +1,9 @@
+appVersion: 0.1.0
+description: Ceph exporter for Prometheus consumpution
+engine: gotpl
+home: https://github.com/digitalocean/ceph_exporter
+icon: http://cdn.gmem.site/images/k8s/ceph-provisioners.png
+name: ceph-exporter
+sources:
+- https://github.com/digitalocean/ceph_exporter
+version: 0.1.0

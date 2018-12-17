@@ -15,7 +15,7 @@ RUN echo "deb https://download.ceph.com/debian-luminous xenial main" >> /etc/apt
 RUN apt-get update && \
     apt-get install -y --force-yes librados-dev librbd-dev
 
-RUN \
+RUN export https_proxy=http://10.0.0.1:8087 && \
   mkdir -p /goroot && \
   curl https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz | tar xvzf - -C /goroot --strip-components=1
 
@@ -37,7 +37,7 @@ RUN echo "deb https://download.ceph.com/debian-luminous xenial main" >> /etc/apt
     rm -rf /var/lib/apt/lists/*
 
 
-COPY /bin/ceph_exporter /bin/ceph_exporter
+COPY /ceph_exporter /bin/ceph_exporter
 RUN chmod +x /bin/ceph_exporter
 
 EXPOSE 9100

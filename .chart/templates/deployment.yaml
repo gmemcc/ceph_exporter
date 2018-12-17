@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    tier: application
+    app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicas }}
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      tier: application
+      app: {{ .Chart.Name }}
+      release: {{ .Release.Name }}
+  serviceName: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9100"
+        prometheus.io/scrape: "true"
+      labels:
+        tier: application
+        app: {{ .Chart.Name }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: exporter
+        image: {{ .Values.exporter.image.repo }}/ceph_exporter:{{ .Values.exporter.image.tag }}
+        imagePullPolicy: Always
+        command:
+        - /bin/ceph_exporter
+        - -ceph.config={{ .Values.exporter.ceph.mountPath }}/ceph.conf
+        - -ceph.user={{ .Values.exporter.ceph.user }}
+        - -telemetry.addr={{ .Values.exporter.telemetry.addr }}
+        - -telemetry.path={{ .Values.exporter.telemetry.path }}
+        resources:
+          requests:
+            cpu: {{ .Values.exporter.reqCpu }}m
+            memory: {{ .Values.exporter.reqMem }}Mi
+          limits:
+            cpu: {{ .Values.exporter.lmtCpu }}m
+            memory: {{ .Values.exporter.lmtMem }}Mi
+        volumeMounts:
+        - mountPath: {{ .Values.exporter.ceph.mountPath }}
+          name: config
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Chart.Name }}

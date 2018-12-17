@@ -1,0 +1,15 @@
+exporter:
+  reqCpu: 250
+  reqMem: 256
+  lmtCpu: 500
+  lmtMem: 512
+  image:
+    repo: docker.gmem.cc/digitalocean
+    tag: latest
+  telemetry:
+    addr: "0.0.0.0:9100"
+    path: /metrics
+  ceph:
+    user: admin
+    mountPath: /etc/ceph
+    mons: "10.0.5.1, 10.0.2.1, 10.0.3.1"
